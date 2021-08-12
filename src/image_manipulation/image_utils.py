@@ -1,7 +1,7 @@
 import numpy as np
 import cv2 as cv
 from imutils import rotate_bound as imrotate
-from .image_pb2 import NLImage
+from image_manipulation.image_pb2 import NLImage
 
 
 AVERAGING_KERNEL = np.ones((3,3), np.float32) / 9

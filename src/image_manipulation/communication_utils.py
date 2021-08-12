@@ -1,5 +1,5 @@
-from image_manipulation.image_pb2 import  NLImageRotateRequest, NLImageService
-from image_manipulation.image_pb2_grpc import NLImageServiceServicer, NLImageServiceStub, NLImageService
+from image_manipulation.image_pb2 import  NLImageRotateRequest
+from image_manipulation.image_pb2_grpc import NLImageServiceServicer
 from image_manipulation.image_utils import (
     get_mean_image, 
     convert_proto_to_image, 
@@ -8,7 +8,7 @@ from image_manipulation.image_utils import (
 )
 
 
-class NLImageService(NLImageServiceServicer):
+class ImageService(NLImageServiceServicer):
     def Meanfilter(self, request, context):
         user_image_pb = convert_proto_to_image(request)
         mean_image_matrix = get_mean_image(user_image_pb)

@@ -7,6 +7,7 @@ poetry add requests imutils
 poetry add requests ipython
 poetry add requests grpcio
 poetry add requests grpcio-tools
+poetry add requests black
 poetry add requests fire
 
 poetry build && poetry lock && poetry install && poetry shell
