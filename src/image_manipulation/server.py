@@ -3,8 +3,8 @@ from concurrent import futures
 import grpc
 from fire import Fire
 
-from .image_pb2_grpc import add_NLImageServiceServicer_to_server 
 from image_manipulation.communication_utils import ImageService
+from image_manipulation.image_pb2_grpc import add_NLImageServiceServicer_to_server 
 
 
 def run_service_request():
