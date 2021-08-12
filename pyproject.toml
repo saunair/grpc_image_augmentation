@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "image-manipulation"
+version = "0.1.0"
+description = "Neuralink image manipulation challenge"
+authors = ["Saurabh Nair <saurabh.nk@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.26.0"
+numpy = "^1.21.1"
+opencv-python = "^4.5.3"
+grpcio = "^1.39.0"
+ipython = "^7.26.0"
+imutils = "^0.5.4"
+grpcio-tools = "^1.39.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+packages = [{ include = "data" }]
+include = ["data/proto/image.proto", "data/image.jpg"]
