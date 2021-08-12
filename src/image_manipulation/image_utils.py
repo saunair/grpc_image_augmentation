@@ -20,7 +20,7 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
     return cv.filter2D(input_image, -1, kernel=AVERAGING_KERNEL)
 
 
-def rotate_image(
+def get_rotated_image(
     input_image: np.ndarray, 
     rotation_request: int  # Currently setting to an int as the possible rotations are fixed.
 ) -> np.ndarray:

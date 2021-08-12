@@ -10,4 +10,4 @@ poetry add requests grpcio-tools
 poetry add requests fire
 
 poetry build && poetry lock && poetry install && poetry shell
-python -m grpc_tools.protoc data/proto/image.proto --python_out=src/image_manipulation/ --proto_path=data/proto/
+python -m grpc_tools.protoc data/proto/image.proto --python_out=src/image_manipulation/ --proto_path=data/proto/ --grpc_python_out=src/image_manipulation/
