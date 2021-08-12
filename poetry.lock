@@ -72,6 +72,18 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "fire"
+version = "0.4.0"
+description = "A library for automatically generating command line interfaces."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+termcolor = "*"
+
+[[package]]
 name = "grpcio"
 version = "1.39.0"
 description = "HTTP/2-based RPC framework"
@@ -383,6 +395,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "termcolor"
+version = "1.1.0"
+description = "ANSII Color formatting for output in terminal."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "traitlets"
 version = "5.0.5"
 description = "Traitlets Python configuration system"
@@ -440,7 +460,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "363c0aad638f71fa9c957bae1757bf1641773eca8e700ecfe6c8ec88d8d4c6fc"
+content-hash = "3732c92f32351cb315cdb1f6fa42b9240ce4200c404aeec7cd734ab62b80b64f"
 
 [metadata.files]
 appnope = [
@@ -474,6 +494,9 @@ colorama = [
 decorator = [
     {file = "decorator-5.0.9-py3-none-any.whl", hash = "sha256:6e5c199c16f7a9f0e3a61a4a54b3d27e7dad0dbdde92b944426cb20914376323"},
     {file = "decorator-5.0.9.tar.gz", hash = "sha256:72ecfba4320a893c53f9706bebb2d55c270c1e51a28789361aa93e4a21319ed5"},
+]
+fire = [
+    {file = "fire-0.4.0.tar.gz", hash = "sha256:c5e2b8763699d1142393a46d0e3e790c5eb2f0706082df8f647878842c216a62"},
 ]
 grpcio = [
     {file = "grpcio-1.39.0-cp27-cp27m-macosx_10_10_x86_64.whl", hash = "sha256:4163e022f365406be2da78db890035463371effea172300ce5af8a768142baf3"},
@@ -748,6 +771,9 @@ requests = [
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+termcolor = [
+    {file = "termcolor-1.1.0.tar.gz", hash = "sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"},
 ]
 traitlets = [
     {file = "traitlets-5.0.5-py3-none-any.whl", hash = "sha256:69ff3f9d5351f31a7ad80443c2674b7099df13cc41fc5fa6e2f6d3b0330b0426"},
