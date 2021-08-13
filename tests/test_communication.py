@@ -18,6 +18,7 @@ def test_service_object():
     op_pb = service_object.MeanFilter(valid_image_pb, context=Mock())
     assert op_pb.width == 1080
     
+    # Check if exception handling works correctly.
     invalid_pb_image = copy(valid_image_pb)
     invalid_pb_image.width = 80
     op_pb = service_object.MeanFilter(invalid_pb_image, context=Mock())
