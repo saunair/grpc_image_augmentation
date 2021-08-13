@@ -68,25 +68,10 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
         result[:, :, 0] = filter_2d(input_image[:, :, 0])
         result[:, :, 1] = filter_2d(input_image[:, :, 1])
         result[:, :, 2] = filter_2d(input_image[:, :, 2])
-        #b = cv2.filter2D(input_image, -1, kernel=AVERAGING_KERNEL)
         return result
 
     # If grey scale run it only once and return the image.
-    a = filter_2d(input_image)
-    return a
-
-
-#def get_mean_image(input_image: np.ndarray) -> np.ndarray:
-#    """Run an averaging filter over `input_image`.
-#    
-#    Args:
-#        input_image: The image provided by the user. Can be greyscale or RGB.
-#
-#    Returns: 
-#        The blurred image.
-#    
-#    """
-#    return cv2.filter2D(input_image, -1, kernel=AVERAGING_KERNEL)
+    return filter_2d(input_image)
 
 
 def get_rotated_image(
