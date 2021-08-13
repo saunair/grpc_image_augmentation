@@ -12,12 +12,12 @@ def test_version():
 def test_image_manipulations():
     input_image = np.array([[13, 14, 15], [11, 12, 13], [7, 8, 9]], dtype=np.uint8)
     mean_image = image_utils.get_mean_image(input_image)
-    rotated_image = image_utils.rotate_image(input_image, 90)
+    rotated_image = image_utils.get_rotated_image(input_image, 90)
 
 
 def test_convert_image_to_pb_and_back():
     # Test for an RGB image.
-    input_image_path = "/home/saurabh/coding/grpc_image_project/20210802-neuralink-image-service-prompt/image_manipulation/test_images/show_me_what_youve_got.jpg"
+    input_image_path = "testing_data/image.jpg"
     input_image = cv2.imread(input_image_path)
     image_pb = image_utils.convert_image_to_proto(input_image)
     recovered_image = image_utils.convert_proto_to_image(image_pb)

@@ -16,7 +16,7 @@ def run_service_request(port: int = 50051, host: str = "localhost", max_workers_
         max_workers_per_process: Maximum number of threads that will run on one process (one core of the processor).
 
     """
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers_per_process))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers_per_process), compression=grpc.Compression.Gzip)
     add_NLImageServiceServicer_to_server(ImageService(), server)
     server.add_insecure_port(f"{host}:{port}")
     server.start()
