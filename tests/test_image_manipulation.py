@@ -12,7 +12,30 @@ def test_version():
 def test_image_manipulations():
     input_image = np.array([[13, 14, 15], [11, 12, 13], [7, 8, 9]], dtype=np.uint8)
     mean_image = image_utils.get_mean_image(input_image)
+    expected_mean = np.array(
+        [[12, 13, 13],
+         [10, 11, 11],
+         [ 9, 10, 10]], 
+        dtype=np.uint8
+    )
+    assert np.allclose(mean_image, expected_mean), "The mean function is broken on the mock image"
     rotated_image = image_utils.get_rotated_image(input_image, 90)
+    expected_rotated_image = np.array(
+        [[ 0,  7, 11],
+         [ 0,  8, 12],
+         [ 0,  9, 13]], dtype=np.uint8
+    )
+    assert np.allclose(rotated_image, expected_rotated_image)
+
+    # Now let's try the operations on a real image.
+    input_image_path = "testing_data/image.jpg"
+    input_image = cv2.imread(input_image_path)
+    expected_mean_image = cv2.imread("testing_data/mean_image.png")
+    mean_image = image_utils.get_mean_image(input_image)
+    assert np.allclose(mean_image, expected_mean_image, atol=3.0), "Averaging function is broken"
+    rotated_image = image_utils.get_rotated_image(input_image, 90)
+    expected_rotated_image = cv2.imread("testing_data/rotated_image.png")
+    assert np.allclose(rotated_image, expected_rotated_image), "Rotation function is broken"
 
 
 def test_convert_image_to_pb_and_back():
@@ -28,4 +51,3 @@ def test_convert_image_to_pb_and_back():
     image_pb = image_utils.convert_image_to_proto(gray_image)
     recovered_image = image_utils.convert_proto_to_image(image_pb)
     assert np.allclose(recovered_image, gray_image, atol=0.0), "Image has been changed."
-
