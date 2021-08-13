@@ -36,20 +36,27 @@ def run_client(
     # We want an option to run both. Hence we'll do it sequentially if the user requests for it. 
     output_image = None
     if mean: 
-        with grpc.insecure_channel("localhost:50051") as channel:
+        with grpc.insecure_channel(f"{host}:{port}") as channel:
             user_image = cv2.imread(input_dir)
             stub = image_pb2_grpc.NLImageServiceStub(channel)
             response = stub.MeanFilter(convert_image_to_proto(user_image))
             output_image = convert_proto_to_image(response)
 
-    if rotate in ALLOWED_ROTATIONS[1:]: 
+    if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
         with grpc.insecure_channel(f"{host}:{port}") as channel:
             # We'd like to apply the rotation on the averaged image if rotation is requested.
             # Otherwise we'll read the image from the local directory.
             user_image = cv2.imread(input_dir) if output_image is None else output_image
             stub = image_pb2_grpc.NLImageServiceStub(channel)
-            response = stub.RotateImage(image_pb2.NLImageRotateRequest(rotation=ALLOWED_ROTATIONS.index(rotate), image=convert_image_to_proto(user_image)))
+            response = stub.RotateImage(
+                image_pb2.NLImageRotateRequest(
+                    rotation=ALLOWED_ROTATIONS.index(rotate), 
+                    image=convert_image_to_proto(user_image)
+                )
+            )
             output_image = convert_proto_to_image(response)
+    
+    # Hooray, we now write the image to the user's preferred location.
     cv2.imwrite(img=output_image, filename=output_dir)
 
 
