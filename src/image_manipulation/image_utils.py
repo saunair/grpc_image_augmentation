@@ -35,13 +35,13 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
         The blurred image.
     
     """
-    @jit(nopython=True)
+    #@jit(nopython=True)
     def fastfilter_2d(image, kernel):
         M, N = image.shape
         Mf, Nf = kernel.shape
         Mf2 = Mf // 2
         Nf2 = Nf // 2
-        result = np.zeros_like(image)
+        result = np.zeros_like(image, dtype=image.dtype)
         for i in range(Mf2, M - Mf2):
             for j in range(Nf2, N - Nf2):
                 num = 0.0
@@ -55,7 +55,7 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
     
     # If an RGB image run the filter thrice.
     if len(input_image.shape) > 2:
-        result = np.empty(input_image.shape)
+        result = np.empty(input_image.shape, dtype=input_image.dtype)
         result[0, :, :] = fastfilter_2d(input_image[0], kernel=AVERAGING_KERNEL)
         result[1, :, :] = fastfilter_2d(input_image[1], kernel=AVERAGING_KERNEL)
         result[2, :, :] = fastfilter_2d(input_image[2], kernel=AVERAGING_KERNEL)
