@@ -6,15 +6,28 @@ import numpy as np
 from image_manipulation import image_pb2_grpc, image_pb2
 from image_manipulation.image_utils import (
     convert_proto_to_image, 
-    convert_image_to_proto, 
+    convert_image_to_proto,
+    NLGRPCException
 )
 
 ALLOWED_ROTATIONS = [0, 90, 180, 270]
 
 
+def check_and_print_if_valid_inputs(mean: bool = False, rotate: float = 0):
+    """Check if the inputs provided by the user are supported"""
+    if not mean and np.isclose(rotate, 0.0):
+        print("No action input provided, either send mean as True or a rotation that is valid.")
+        return False
+
+    if rotate not in ALLOWED_ROTATIONS:
+        print(f"Rotation request must be in {ALLOWED_ROTATIONS}")
+        return False
+    return True
+
+
 def run_client(
     mean:bool = False, 
-    rotate: float = 0.0, 
+    rotate: int = 0, 
     port: str = "50051", 
     host: str = "localhost",
     input_dir: str = "/home/saurabh/coding/grpc_image_project/20210802-neuralink-image-service-prompt/image_manipulation/test_images/show_me_what_youve_got.jpg",
@@ -27,11 +40,11 @@ def run_client(
         port: Port of the server the client needs to communicate to. 
         host: The host-name of the server. 
     """
-    if not mean and np.isclose(rotate, 0.0):
-        print("No action input provided, either send mean as True or a rotation that is valid.")
-
-    if rotate not in ALLOWED_ROTATIONS:
-        raise ValueError(f"Rotation request must be in {ALLOWED_ROTATIONS}")
+    if not check_and_print_if_valid_inputs(
+        mean=mean,
+        rotate=rotate,
+    ):
+        return
 
     # We want an option to run both. Hence we'll do it sequentially if the user requests for it. 
     output_image = None
@@ -42,6 +55,11 @@ def run_client(
             user_image = cv2.imread(input_dir)
             stub = image_pb2_grpc.NLImageServiceStub(channel)
             response = stub.MeanFilter(convert_image_to_proto(user_image))
+
+            # If the image was invalid or so, the server returns a Null image with exception in the message.
+            if response.width == 0:
+                raise NLGRPCException(response.data.decode("utf-8"))
+
             output_image = convert_proto_to_image(response)
 
     if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
@@ -59,6 +77,11 @@ def run_client(
                     image=convert_image_to_proto(user_image)
                 )
             )
+
+            # If the image was invalid or so, the server returns a Null image with exception in the message.
+            if response.width == 0:
+                raise NLGRPCException(response.data.decode("utf-8"))
+
             output_image = convert_proto_to_image(response)
     
     # Hooray, we now write the image to the user's preferred location.

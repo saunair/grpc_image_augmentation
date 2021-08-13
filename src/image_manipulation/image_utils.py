@@ -4,7 +4,25 @@ from imutils import rotate_bound as imrotate
 from image_manipulation.image_pb2 import NLImage
 
 
+class NLGRPCException(Exception):
+    """A class to handle server exceptions on the client side."""
+    def __init__(self, message):
+        self.message = message
+
 AVERAGING_KERNEL = np.ones((3,3), np.float32) / 9
+
+
+def NullImageProto(msg:str = ""):
+    """A null image to return if something goes wrong
+    
+    Args: 
+        msg: Optional message to be used to know what exception happened on the server side
+
+    Returns:
+        A null proto buf image representation.
+
+    """
+    return NLImage(width=0, height=0, data=msg)
 
 
 def get_mean_image(input_image: np.ndarray) -> np.ndarray:
@@ -38,7 +56,7 @@ def get_rotated_image(
 
 
 def convert_image_to_proto(image: np.ndarray) -> NLImage:
-    """Convert a numpy image to a protobuf message."""
+    """Convert a numpy `image` to a protobuf message."""
     return NLImage(
         color=len(image.shape) > 2, # If the dimensions has a 3rd value which is the channels, it is RGB.
         data=image.flatten().tobytes(),
