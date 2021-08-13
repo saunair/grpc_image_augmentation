@@ -10,7 +10,7 @@ from image_manipulation import image_utils
 def test_service_object():
     service_object = ImageService()
     # Test an expected case.
-    input_image_path = "testing_data/image.jpg" 
+    input_image_path = "testing_data/image.png" 
     input_image = cv2.imread(input_image_path)
     valid_image_pb = image_utils.convert_image_to_proto(input_image)
 
