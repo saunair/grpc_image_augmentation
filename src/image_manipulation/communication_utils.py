@@ -9,15 +9,15 @@ from image_manipulation.image_utils import (
 
 
 class ImageService(NLImageServiceServicer):
-    def Meanfilter(self, request, context):
+    def MeanFilter(self, request, context):
         user_image_pb = convert_proto_to_image(request)
         mean_image_matrix = get_mean_image(user_image_pb)
         return convert_image_to_proto(mean_image_matrix)
 
     def RotateImage(self, request, context):
-        user_image_pb = convert_proto_to_image(request)
-        rotated_image_matrix = get_rotated_image(user_image_pb)
+        user_image_pb = convert_proto_to_image(request.image)
+        rotated_image_matrix = get_rotated_image(
+            input_image=user_image_pb, 
+            rotation_request=request.rotation * 90
+        )
         return convert_image_to_proto(rotated_image_matrix)
-
-
-

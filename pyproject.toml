@@ -37,4 +37,5 @@ exclude = '''
 
 [tool.poetry.scripts]
 server= "image_manipulation.server:main"
+client= "image_manipulation.client:main"
 
