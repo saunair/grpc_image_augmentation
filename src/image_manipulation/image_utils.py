@@ -1,7 +1,7 @@
 import numpy as np
-import cv2 as cv
 from imutils import rotate_bound as imrotate
 from image_manipulation.image_pb2 import NLImage
+from numba import double, jit
 
 
 class NLGRPCException(Exception):
@@ -35,7 +35,34 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
         The blurred image.
     
     """
-    return cv.filter2D(input_image, -1, kernel=AVERAGING_KERNEL)
+    @jit(nopython=True)
+    def fastfilter_2d(image, kernel):
+        M, N = image.shape
+        Mf, Nf = kernel.shape
+        Mf2 = Mf // 2
+        Nf2 = Nf // 2
+        result = np.zeros_like(image)
+        for i in range(Mf2, M - Mf2):
+            for j in range(Nf2, N - Nf2):
+                num = 0.0
+                for ii in range(Mf):
+                    for jj in range(Nf):
+                        num += (kernel[Mf-1-ii, Nf-1-jj] * image[i-Mf2+ii, j-Nf2+jj])
+                result[i, j] = num
+        return result
+
+    #fastfilter_2d = jit(double[:,:](double[:,:], double[:,:]))(_filter2d)
+    
+    # If an RGB image run the filter thrice.
+    if len(input_image.shape) > 2:
+        result = np.empty(input_image.shape)
+        result[0, :, :] = fastfilter_2d(input_image[0], kernel=AVERAGING_KERNEL)
+        result[1, :, :] = fastfilter_2d(input_image[1], kernel=AVERAGING_KERNEL)
+        result[2, :, :] = fastfilter_2d(input_image[2], kernel=AVERAGING_KERNEL)
+        return result
+
+    # If grey scale run it only once and return the image.
+    return fastfilter_2d(input_image, kernel=AVERAGING_KERNEL)
 
 
 def get_rotated_image(

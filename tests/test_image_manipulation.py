@@ -13,6 +13,10 @@ def test_image_manipulations():
     input_image = np.array([[13, 14, 15], [11, 12, 13], [7, 8, 9]], dtype=np.uint8)
     mean_image = image_utils.get_mean_image(input_image)
     rotated_image = image_utils.get_rotated_image(input_image, 90)
+    input_image_path = "testing_data/image.jpg"
+    input_image = cv2.imread(input_image_path)
+    mean_image = image_utils.get_mean_image(input_image)
+    rotated_image = image_utils.get_rotated_image(input_image, 90)
 
 
 def test_convert_image_to_pb_and_back():
