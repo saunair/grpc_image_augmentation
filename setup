@@ -14,7 +14,6 @@ poetry add requests black
 poetry add requests fire
 poetry add requests mock
 poetry add requests numba
-
+python -m grpc_tools.protoc data/proto/image.proto --python_out=src/image_manipulation/grpc_pb/ --proto_path=data/proto/ --grpc_python_out=src/image_manipulation/grpc_pb
 poetry build && poetry lock && poetry install && poetry shell
-python -m grpc_tools.protoc data/proto/image.proto --python_out=src/image_manipulation/ --proto_path=data/proto/ --grpc_python_out=src/image_manipulation/
 

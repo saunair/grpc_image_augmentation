@@ -32,8 +32,8 @@ build-backend = "poetry.core.masonry.api"
 exclude = '''
 
 (
-   | src/image_manipulation/image_pb2.py
-   | src/image_manipulation/image_pb2_grpc.py
+   | src/image_manipulation/grpc_pb/image_pb2.py
+   | src/image_manipulation/grpc_pb/image_pb2_grpc.py
 )
 '''
 
