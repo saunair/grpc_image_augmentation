@@ -1,7 +1,7 @@
 import sys
 
-from image_manipulation.grpc_pb.image_pb2 import  NLImageRotateRequest, NLImage
-from image_manipulation.grpc_pb.image_pb2_grpc import NLImageServiceServicer
+from image_manipulation.image_pb2 import  NLImageRotateRequest, NLImage
+from image_manipulation.image_pb2_grpc import NLImageServiceServicer
 from image_manipulation.image_utils import (
     get_mean_image, 
     convert_proto_to_image, 

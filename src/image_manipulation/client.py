@@ -3,7 +3,7 @@ from fire import Fire
 import grpc
 import numpy as np
 
-from image_manipulation.grpc_pb import image_pb2_grpc, image_pb2
+from image_manipulation import image_pb2_grpc, image_pb2
 from image_manipulation.image_utils import (
     convert_proto_to_image, 
     convert_image_to_proto,

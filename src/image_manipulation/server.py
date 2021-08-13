@@ -4,7 +4,7 @@ import grpc
 from fire import Fire
 
 from image_manipulation.communication_utils import ImageService
-from image_manipulation.grpc_pb.image_pb2_grpc import add_NLImageServiceServicer_to_server 
+from image_manipulation.image_pb2_grpc import add_NLImageServiceServicer_to_server 
 
 
 def run_service_request(port: int = 50051, host: str = "localhost", max_workers_per_process: int = 10) -> None:
