@@ -1,5 +1,7 @@
 #!/bin/bash
 
+virtualenv --python=/usr/bin/python3.7 .
+source bin/activate
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
 source $HOME/.poetry/env
@@ -7,10 +9,8 @@ source $HOME/.poetry/env
 poetry add requests numpy
 poetry add requests opencv-python
 poetry add requests imutils
-poetry add requests ipython
 poetry add requests grpcio
 poetry add requests grpcio-tools
-poetry add requests black
 poetry add requests fire
 poetry add requests mock
 poetry add requests numba

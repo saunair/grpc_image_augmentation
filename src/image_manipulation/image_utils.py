@@ -3,7 +3,6 @@ import threading
 
 import cv2
 import numpy as np
-from imutils import rotate_bound as imrotate
 from image_manipulation.image_pb2 import NLImage
 from numba import uint8, jit
 
