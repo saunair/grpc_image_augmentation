@@ -1,3 +1,4 @@
+"""All the server and client API is written here."""
 import sys
 
 import numpy as np
@@ -83,7 +84,6 @@ def run_one_request_on_channel(mean: bool, rotate: int, channel, input_image: np
         # If the image was invalid or so, the server returns a Null image with exception in the message.
         if response.width == 0:
             raise NLGRPCException(response.data.decode("utf-8"))
-
         output_image = convert_proto_to_image(response)
 
     if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
@@ -101,8 +101,6 @@ def run_one_request_on_channel(mean: bool, rotate: int, channel, input_image: np
         # If the image was invalid or so, the server returns a Null image with exception in the message.
         if response.width == 0:
             raise NLGRPCException(response.data.decode("utf-8"))
-
         output_image = convert_proto_to_image(response)
+
     return output_image
-
-

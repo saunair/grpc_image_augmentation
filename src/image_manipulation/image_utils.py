@@ -11,7 +11,6 @@ class NLGRPCException(Exception):
         self.message = message
 
 
-
 def NullImageProto(msg:str = ""):
     """A null image to return if something goes wrong
     
@@ -23,9 +22,6 @@ def NullImageProto(msg:str = ""):
 
     """
     return NLImage(width=0, height=0, data=msg)
-
-
-AVERAGING_KERNEL = np.ones((3,3), dtype=np.float32) / 9
 
 
 # This function is not working the way it should be, hence sticking to the opencv version.
@@ -60,14 +56,11 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
 
         return result
 
-    #fastfilter_2d = jit(double[:,:](double[:,:], double[:,:]))(_filter2d)
-    
     # If an RGB image run the filter thrice.
     if len(input_image.shape) > 2:
         result = np.empty(input_image.shape, dtype=input_image.dtype)
-        result[:, :, 0] = filter_2d(input_image[:, :, 0])
-        result[:, :, 1] = filter_2d(input_image[:, :, 1])
-        result[:, :, 2] = filter_2d(input_image[:, :, 2])
+        for depth in range(3):
+            result[:, :, depth] = filter_2d(input_image[:, :, depth])
         return result
 
     # If grey scale run it only once and return the image.
