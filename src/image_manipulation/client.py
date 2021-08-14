@@ -1,4 +1,6 @@
 import os
+import logging
+import time
 
 import cv2
 from fire import Fire
@@ -12,7 +14,9 @@ from image_manipulation.image_utils import (
     NLGRPCException
 )
 from image_manipulation.communication_utils import run_one_request_on_channel
-import time
+
+
+LOG = logging.getLogger(__name__)
 
 
 ALLOWED_ROTATIONS = ["none", "ninety_deg", "one_eighty_deg", "two_seventy_deg"]
@@ -102,7 +106,16 @@ def run_client(
             output=output,
         ):
             return
-        input_image = cv2.imread(input)
+        try:
+            input_image = cv2.imread(input)
+        except:
+            LOG.error(f"Something went wrong while reading the input image: {input}")
+            return
+        if input_image is None:
+            LOG.error(f"Something went wrong while reading the input image: {input}")
+            return
+        
+        # Convert the rotation command passed to lower as it is easier for us to assess.
         rotate = rotate.lower()
 
         output_image = run_one_request_on_channel(
@@ -120,7 +133,15 @@ def run_client(
             for image_extension_option in SUPPORTED_IMAGE_EXTENSIONS:
                 if filename.endswith(image_extension_option):
                     image_file_path = os.path.join(input, filename)
-                    input_image = cv2.imread(image_file_path)
+                    try:
+                        input_image = cv2.imread(image_file_path)
+                    except:
+                        LOG.error(f"something went wrong while reading the input image: {image_file_path}")
+                        continue
+                    if input_image is None:
+                        LOG.error(f"something went wrong while reading the input image: {image_file_path}")
+                        continue
+
                     start_time = time.time()
                     output_image = run_one_request_on_channel(
                         mean=mean, 
