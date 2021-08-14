@@ -9,8 +9,8 @@ Whenever opening a new terminal to run the server or client, run ./setup from th
 To run the sever, 
 1. open a new terminal
 2. cd into the root directory of this package
-3. run: ./setup
-4. type: server --host-name MY_HOST --port MY_PORT 
+3. run: ```./setup```
+4. type: ```server --host-name MY_HOST --port MY_PORT```
 
     **run server --help to know all the options**
 
