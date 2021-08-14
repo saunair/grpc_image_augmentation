@@ -12,27 +12,28 @@ To run the installation,
 Running the Server
 --------------------------------------------------------------------------------------------------
 
-1. open a new terminal
+1. Start a new terminal
 
 2. cd into the root directory of this package
 
 3. run: ``./setup``
+   *This should make a new poetry shell*
 
-4. type: ``server --host-name MY_HOST --port MY_PORT``
+4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
 
 
     **run server --help to know all the options**
 
 Running the Client
 --------------------------------------------------------------------------------------------------
-To run the client, 
-1. open a new terminal
+1. Start a new terminal
 
 2. cd into the root directory of this package
 
 3. run: ``./setup``
+   *This should make a new poetry shell*
 
-4. type: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
+4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
 
     
   **run client --help to know all the command line options**
