@@ -2,6 +2,7 @@
 import sys
 
 import numpy as np
+import cv2
 
 from image_manipulation.image_pb2 import  NLImageRotateRequest, NLImage
 from image_manipulation.image_pb2_grpc import NLImageServiceServicer
@@ -89,7 +90,7 @@ def run_one_request_on_channel(mean: bool, rotate: int, channel, input_image: np
     if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
         # We'd like to apply the rotation on the averaged image if rotation is requested.
         # Otherwise we'll read the image from the local directory.
-        input_image = cv2.imread(input) if output_image is None else output_image
+        input_image = input_image if output_image is None else output_image
         stub = image_pb2_grpc.NLImageServiceStub(channel)
         response = stub.RotateImage(
             image_pb2.NLImageRotateRequest(
