@@ -16,9 +16,9 @@ Running the Server
 
 2. cd into the root directory of this package
 
-3. run: ```./setup```
+3. run: ``./setup``
 
-4. type: ```server --host-name MY_HOST --port MY_PORT```
+4. type: ``server --host-name MY_HOST --port MY_PORT``
 
 
     **run server --help to know all the options**
@@ -30,9 +30,9 @@ To run the client,
 
 2. cd into the root directory of this package
 
-3. run: ./setup
+3. run: ``./setup``
 
-4. type: client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH
+4. type: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
 
     
   **run client --help to know all the command line options**
