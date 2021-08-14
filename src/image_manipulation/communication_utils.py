@@ -199,11 +199,12 @@ def spawn_server(
     LOG.info(f"Binding to {bind_address}")
     sys.stdout.flush()
     workers = []
-    for _ in range(number_of_cores_to_use):
+    for process_number in range(number_of_cores_to_use):
         worker = multiprocessing.Process(
             target=_run_servers_one_process,
             args=(bind_address, max_workers_per_process)
         )
+        LOG.info(f"Started process number: {process_number}")
         worker.start()
         workers.append(worker)
     for worker in workers:
