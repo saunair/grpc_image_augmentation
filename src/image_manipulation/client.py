@@ -1,3 +1,5 @@
+import os
+
 import cv2
 from fire import Fire
 import grpc
@@ -14,8 +16,24 @@ from image_manipulation.communication_utils import run_one_request_on_channel
 ALLOWED_ROTATIONS = [0, 90, 180, 270]
 
 
-def check_and_print_if_valid_inputs(mean: bool = False, rotate: float = 0):
-    """Check if the inputs provided by the user are supported"""
+def check_and_print_if_valid_inputs(
+    output: str,
+    input: str, 
+    mean: bool, 
+    rotate: float, 
+):
+    """Check if the inputs provided by the user are supported
+
+    Args:
+        mean: Set to true if a mean filter needs to be applied on the input image.
+        rotate: Anticlockwise rotation in degrees to rotate the image.
+        input: Path to the input image
+        output: Path to the output image.
+    
+    Returns:
+        valid: True if all the inputs are valid.
+
+    """
     if not mean and np.isclose(rotate, 0.0):
         print("No action input provided, either send mean as True or a rotation that is valid.")
         return False
@@ -23,6 +41,26 @@ def check_and_print_if_valid_inputs(mean: bool = False, rotate: float = 0):
     if rotate not in ALLOWED_ROTATIONS:
         print(f"Rotation request must be in {ALLOWED_ROTATIONS}")
         return False
+    
+    if not os.path.exists(input):
+        print(os.path.exists(input), "tihs!!")
+        print(f"{input} doesn't exist. Please provide a valid image path.")
+        return False
+
+    ext = os.path.splitext(input)[-1].lower()
+    if ext not in [".png", ".jpg", ".jpeg"]:
+        print(f"Invalid image file extension {ext} passed to the client for the input image.")
+        return False
+    
+    if not os.path.exists(os.path.dirname(output)):
+        print(f"{output} doesn't exist. Please provide a valid image path.")
+        return False
+
+    ext = os.path.splitext(output)[-1].lower()
+    if ext not in [".png", ".jpg", ".jpeg"]:
+        print(f"Invalid image file extension {ext} passed to the client for the output path.")
+        return False
+
     return True
 
 
@@ -32,8 +70,8 @@ def run_client(
     port: str = "50051", 
     host: str = "localhost",
     # Using a python keyword "input" here. But keeping the requirements of the assignment.
-    input: str = "/home/saurabh/coding/grpc_image_project/20210802-neuralink-image-service-prompt/image_manipulation/test_images/show_me_what_youve_got.jpg", 
-    output: str = "/home/saurabh/wabalabadubdub.jpg"
+    input: str = "/home/saurabh/image.jpg", 
+    output: str = "/home/saurabh/WabaLabaDubDub.jpeg"
 ) -> None:
     """
     Args:
@@ -45,6 +83,8 @@ def run_client(
     if not check_and_print_if_valid_inputs(
         mean=mean,
         rotate=rotate,
+        input=input,
+        output=output,
     ):
         return
 
