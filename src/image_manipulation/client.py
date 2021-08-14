@@ -9,6 +9,7 @@ from image_manipulation.image_utils import (
     convert_image_to_proto,
     NLGRPCException
 )
+from image_manipulation.communication_utils import run_one_request_on_channel
 
 ALLOWED_ROTATIONS = [0, 90, 180, 270]
 
@@ -30,8 +31,9 @@ def run_client(
     rotate: int = 0, 
     port: str = "50051", 
     host: str = "localhost",
-    input_dir: str = "/home/saurabh/coding/grpc_image_project/20210802-neuralink-image-service-prompt/image_manipulation/test_images/show_me_what_youve_got.jpg",
-    output_dir: str = "/home/saurabh/wabalabadubdub.jpg"
+    # Using a python keyword "input" here. But keeping the requirements of the assignment.
+    input: str = "/home/saurabh/coding/grpc_image_project/20210802-neuralink-image-service-prompt/image_manipulation/test_images/show_me_what_youve_got.jpg", 
+    output: str = "/home/saurabh/wabalabadubdub.jpg"
 ) -> None:
     """
     Args:
@@ -47,45 +49,17 @@ def run_client(
         return
 
     # We want an option to run both. Hence we'll do it sequentially if the user requests for it. 
-    output_image = None
-    if mean: 
-        with grpc.insecure_channel(
-            f"{host}:{port}", compression=grpc.Compression.Gzip
-        ) as channel:
-            user_image = cv2.imread(input_dir)
-            stub = image_pb2_grpc.NLImageServiceStub(channel)
-            response = stub.MeanFilter(convert_image_to_proto(user_image))
-
-            # If the image was invalid or so, the server returns a Null image with exception in the message.
-            if response.width == 0:
-                raise NLGRPCException(response.data.decode("utf-8"))
-
-            output_image = convert_proto_to_image(response)
-
-    if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
-        with grpc.insecure_channel(
-            f"{host}:{port}", 
-            compression=grpc.Compression.Gzip
-        ) as channel:
-            # We'd like to apply the rotation on the averaged image if rotation is requested.
-            # Otherwise we'll read the image from the local directory.
-            user_image = cv2.imread(input_dir) if output_image is None else output_image
-            stub = image_pb2_grpc.NLImageServiceStub(channel)
-            response = stub.RotateImage(
-                image_pb2.NLImageRotateRequest(
-                    rotation=ALLOWED_ROTATIONS.index(rotate), 
-                    image=convert_image_to_proto(user_image)
-                )
-            )
-
-            # If the image was invalid or so, the server returns a Null image with exception in the message.
-            if response.width == 0:
-                raise NLGRPCException(response.data.decode("utf-8"))
-
-            output_image = convert_proto_to_image(response)
+    channel = grpc.insecure_channel(f"{host}:{port}", compression=grpc.Compression.Gzip)
+    input_image = cv2.imread(input)
+    output_image = run_one_request_on_channel(
+        mean=mean, 
+        rotate=rotate, 
+        channel=channel,
+        input_image=input_image,
+    )
     
     # Hooray, we now write the image to the user's preferred location.
-    cv2.imwrite(img=output_image, filename=output_dir)
+    cv2.imwrite(img=output_image, filename=output)
 
 
 def main():

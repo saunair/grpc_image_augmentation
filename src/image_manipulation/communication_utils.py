@@ -1,5 +1,7 @@
 import sys
 
+import numpy as np
+
 from image_manipulation.image_pb2 import  NLImageRotateRequest, NLImage
 from image_manipulation.image_pb2_grpc import NLImageServiceServicer
 from image_manipulation.image_utils import (
@@ -9,6 +11,7 @@ from image_manipulation.image_utils import (
     get_rotated_image, 
     NullImageProto
 )
+from image_manipulation import image_pb2_grpc, image_pb2
 
 
 class ImageService(NLImageServiceServicer):
@@ -54,3 +57,52 @@ class ImageService(NLImageServiceServicer):
         except Exception as e:
             # Handling all types of exception as we don't have an exact control over the input.
             return NullImageProto(msg=format(e))
+
+
+def run_one_request_on_channel(mean: bool, rotate: int, channel, input_image: np.ndarray) -> np.ndarray or None:
+    """Run one request on an already opened channel
+    
+    Args:
+        mean: Set to true if a mean filter needs to be applied on the input image.
+        rotate: Anticlockwise rotation in degrees to rotate the image.
+        channel: the channel on which the the server is listening to.
+        input_image: The user's image that needs to be manipulated. 
+
+    Returns:
+        output_image: The output image that is requested by the user.
+
+    Raises:
+        NLGRPCException: If the data passed to the server is invalid or some error occured at the server side. 
+        
+    """
+    ALLOWED_ROTATIONS = [0, 90, 180, 270]
+    output_image = None
+    if mean: 
+        stub = image_pb2_grpc.NLImageServiceStub(channel)
+        response = stub.MeanFilter(convert_image_to_proto(input_image))
+        # If the image was invalid or so, the server returns a Null image with exception in the message.
+        if response.width == 0:
+            raise NLGRPCException(response.data.decode("utf-8"))
+
+        output_image = convert_proto_to_image(response)
+
+    if rotate in ALLOWED_ROTATIONS[1:]: # We don't check for zero rotations.
+        # We'd like to apply the rotation on the averaged image if rotation is requested.
+        # Otherwise we'll read the image from the local directory.
+        input_image = cv2.imread(input) if output_image is None else output_image
+        stub = image_pb2_grpc.NLImageServiceStub(channel)
+        response = stub.RotateImage(
+            image_pb2.NLImageRotateRequest(
+                rotation=ALLOWED_ROTATIONS.index(rotate), 
+                image=convert_image_to_proto(input_image)
+            )
+        )
+
+        # If the image was invalid or so, the server returns a Null image with exception in the message.
+        if response.width == 0:
+            raise NLGRPCException(response.data.decode("utf-8"))
+
+        output_image = convert_proto_to_image(response)
+    return output_image
+
+
