@@ -1,8 +1,12 @@
 import numpy as np
 import cv2
+import os
 
 from image_manipulation import __version__
 from image_manipulation import image_utils 
+
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def test_version():
@@ -28,19 +32,19 @@ def test_image_manipulations():
     assert np.allclose(rotated_image, expected_rotated_image)
 
     # Now let's try the operations on a real image.
-    input_image_path = "testing_data/image.png"
+    input_image_path = os.path.join(dir_path, "testing_data/image.png")
     input_image = cv2.imread(input_image_path)
     mean_image = image_utils.get_mean_image(input_image)
-    expected_mean_image = cv2.imread("testing_data/mean_image.png")
+    expected_mean_image = cv2.imread(os.path.join(dir_path, "testing_data/mean_image.png"))
     assert np.allclose(mean_image, expected_mean_image, atol=3.0), "Averaging function is broken"
     rotated_image = image_utils.get_rotated_image(input_image, 90)
-    expected_rotated_image = cv2.imread("testing_data/rotated_image.png")
+    expected_rotated_image = cv2.imread(os.path.join(dir_path, "testing_data/rotated_image.png"))
     assert np.allclose(rotated_image, expected_rotated_image), "Rotation function is broken"
 
 
 def test_convert_image_to_pb_and_back():
     # Test for an RGB image.
-    input_image_path = "testing_data/image.png"
+    input_image_path = os.path.join(dir_path, "testing_data/image.png")
     input_image = cv2.imread(input_image_path)
     image_pb = image_utils.convert_image_to_proto(input_image)
     recovered_image = image_utils.convert_proto_to_image(image_pb)

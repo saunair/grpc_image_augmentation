@@ -1,16 +1,21 @@
-import numpy as np
+import os
+
+from copy import copy
 import cv2
 from mock import Mock
-from copy import copy
+import numpy as np
 
 from image_manipulation.communication_utils import ImageService
 from image_manipulation import image_utils
 
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+
 def test_service_object():
     service_object = ImageService()
     # Test an expected case.
-    input_image_path = "testing_data/image.png" 
+    input_image_path = os.path.join(dir_path, "testing_data/image.png")
     input_image = cv2.imread(input_image_path)
     valid_image_pb = image_utils.convert_image_to_proto(input_image)
 
