@@ -4,7 +4,7 @@ This was written for an interview with Neuralink Corp.
 Installation
 -------------------------------------------------------------------------------------------------
 To run the installation, 
-1. run  ```./setup ``` in the project's root directory.
+1. run  ``./setup`` in the project's root directory.
 
    *To verify if the installation worked fine, you may run the unit tests.*
 
