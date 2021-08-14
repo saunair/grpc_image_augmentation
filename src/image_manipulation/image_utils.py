@@ -1,8 +1,11 @@
+import time
+import threading
+
 import cv2
 import numpy as np
 from imutils import rotate_bound as imrotate
 from image_manipulation.image_pb2 import NLImage
-from numba import double, jit
+from numba import uint8, jit
 
 
 class NLGRPCException(Exception):
@@ -24,18 +27,21 @@ def NullImageProto(msg:str = ""):
     return NLImage(width=0, height=0, data=msg)
 
 
+AVERAGING_KERNEL = np.ones((3,3), np.float32) / 9
+
 # This function is not working the way it should be, hence sticking to the opencv version.
 def get_mean_image(input_image: np.ndarray) -> np.ndarray:
     """Run an averaging filter over `input_image`.
-    
+
     Args:
         input_image: The image provided by the user. Can be greyscale or RGB.
 
-    Returns: 
+    Returns:
         The blurred image.
-    
+
     """
-    @jit(nopython=True)
+    input_image = input_image.astype(np.uint8)
+    @jit(uint8[:,:](uint8[:,:]))
     def filter_2d(image):
         M, N = image.shape
         Mf, Nf = 3, 3
@@ -46,39 +52,50 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
                 count = 0
                 for ii in range(Mf):
                     for jj in range(Nf):
-                        row_index = i- 1 + ii 
+                        row_index = i- 1 + ii
                         column_index = j - 1 + jj
                         if row_index < 0 or row_index >= M or column_index < 0 or column_index >= N:
                             continue
                         num += image[row_index, column_index]
                         count += 1
                 result[i, j] = num / count
-
         return result
 
     # If an RGB image run the filter thrice.
     if len(input_image.shape) > 2:
+        start_time = time.time()
         result = np.empty(input_image.shape, dtype=input_image.dtype)
-        for depth in range(3):
+        def set_result(input_image, depth, result):
             result[:, :, depth] = filter_2d(input_image[:, :, depth])
+        threads = []
+
+        for depth in range(3):
+            current_thread = threading.Thread(target=set_result, args=(input_image, depth, result))
+            current_thread.setDaemon(True)
+            current_thread.start()
+            threads.append(current_thread)
+
+        for t in threads:
+            t.join()
+        print(time.time() - start_time)
         return result
 
-    # If grey scale run it only once and return the image.
-    return filter_2d(input_image)
+    a = filter_2d(input_image)
+    return a
 
 
 def get_rotated_image(
-    input_image: np.ndarray, 
+    input_image: np.ndarray,
     rotation_request: int  # Currently setting to an int as the possible rotations are fixed.
 ) -> np.ndarray:
-    """Get a rotated image around the center. 
+    """Get a rotated image around the center.
 
     This API is copied from the image utils convenience functions.
-    
-    Args: 
-        input_image: The image that the user provided. 
+
+    Args:
+        input_image: The image that the user provided.
         rotation_request: Anticlockwise rotation in degrees to rotate the image.
-    
+
     Returns:
         The rotated image around the center of the original image.
 

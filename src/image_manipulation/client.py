@@ -15,7 +15,7 @@ from image_manipulation.communication_utils import run_one_request_on_channel
 import time
 
 
-ALLOWED_ROTATIONS = [0, 90, 180, 270]
+ALLOWED_ROTATIONS = ["none", "ninety_deg", "one_eighty_deg", "two_seventy_deg"]
 SUPPORTED_IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg"]
 
 
@@ -41,6 +41,7 @@ def check_and_print_if_valid_inputs(
         print("No action input provided, either send mean as True or a rotation that is valid.")
         return False
 
+    rotate = rotate.lower()
     if rotate not in ALLOWED_ROTATIONS:
         print(f"Rotation request must be in {ALLOWED_ROTATIONS}")
         return False
@@ -67,7 +68,7 @@ def check_and_print_if_valid_inputs(
 
 def run_client(
     mean:bool = False, 
-    rotate: int = 0, 
+    rotate: str = "ninety_deg", 
     port: str = "50051", 
     host: str = "localhost",
     # Using a python keyword "input" here. But keeping the requirements of the assignment.
@@ -88,7 +89,11 @@ def run_client(
     """
 
     # We want an option to run both. Hence we'll do it sequentially if the user requests for it. 
-    channel = grpc.insecure_channel(f"{host}:{port}", compression=grpc.Compression.Gzip)
+    channel = grpc.insecure_channel(f"{host}:{port}", compression=grpc.Compression.Gzip, options=[
+            ('grpc.max_send_message_length', 1024 * 1024 * 50),
+            ('grpc.max_receive_message_length', 1024 * 1024 * 50),
+        ]
+    )
     if not timeit: # The original mode of the client.
         if not check_and_print_if_valid_inputs(
             mean=mean,
@@ -98,9 +103,11 @@ def run_client(
         ):
             return
         input_image = cv2.imread(input)
+        rotate = rotate.lower()
+
         output_image = run_one_request_on_channel(
             mean=mean, 
-            rotate=rotate, 
+            rotate=rotate * 90, 
             channel=channel,
             input_image=input_image,
         )
@@ -108,6 +115,7 @@ def run_client(
         cv2.imwrite(img=output_image, filename=output)
     else:
         response_times = []
+        rotate = rotate.lower()
         for filename in os.listdir(input):
             for image_extension_option in SUPPORTED_IMAGE_EXTENSIONS:
                 if filename.endswith(image_extension_option):
@@ -116,7 +124,7 @@ def run_client(
                     start_time = time.time()
                     output_image = run_one_request_on_channel(
                         mean=mean, 
-                        rotate=rotate, 
+                        rotate=ALLOWED_ROTATIONS.index(rotate) * 90, 
                         channel=channel,
                         input_image=input_image,
                     )
@@ -124,9 +132,8 @@ def run_client(
     
                     # Hooray, we now write the image to the user's preferred location.
                     output_image_file_path = os.path.join(output, f"manipulated_{filename}")
-                    print("this", filename)
                     cv2.imwrite(img=output_image, filename=output_image_file_path)
-        print(response_times)
+        print(f"Response time: {response_times}")
 
 
 def main():

@@ -22,7 +22,8 @@ from image_manipulation.image_utils import (
     convert_proto_to_image, 
     convert_image_to_proto, 
     get_rotated_image, 
-    NullImageProto
+    NullImageProto, 
+    NLGRPCException
 )
 
 
@@ -101,6 +102,7 @@ def run_one_request_on_channel(
     """
     ALLOWED_ROTATIONS = [0, 90, 180, 270]
     output_image = None
+    input_image = input_image.astype(np.uint8)
     if mean: 
         stub = NLImageServiceStub(channel)
         response = stub.MeanFilter(convert_image_to_proto(input_image))
@@ -165,7 +167,11 @@ def _run_servers_one_process(
     """
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=max_workers_per_process), 
-        compression=grpc.Compression.Gzip
+        compression=grpc.Compression.Gzip,
+        options=(
+            ('grpc.max_send_message_length', 1024 * 1024 * 50),
+            ('grpc.max_receive_message_length', 1024 * 1024 * 50),
+        )
     )
     add_NLImageServiceServicer_to_server(ImageService(), server)
     server.add_insecure_port(bind_address)
