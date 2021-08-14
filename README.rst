@@ -8,7 +8,7 @@ To run the installation,
 
    *To verify if the installation worked fine, you may run the unit tests.*
 
-2. pytest tests/ 
+2. run ``$ pytest tests/`` from the root directory.
    *If all tests pass, the installation worked.*
 
 *Whenever opening a new terminal to run the server or client, run ./setup from the root directory to set the correct python environment.*
