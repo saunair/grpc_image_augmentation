@@ -21,7 +21,6 @@ Running the Server
 
 4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
 
-
     **run server --help to know all the options**
 
 Running the Client
@@ -35,7 +34,6 @@ Running the Client
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
 
-    
-  **run client --help to know all the command line options**
+    **run client --help to know all the command line options**
 
 
