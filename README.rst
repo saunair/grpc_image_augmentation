@@ -6,6 +6,10 @@ Installation
 To run the installation, 
 1. run  ```./setup ``` in the project's root directory.
 
+   *To verify if the installation worked fine, you may run the unit tests.*
+
+2. pytest tests/ 
+   *If all tests pass, the installation worked.*
 
 *Whenever opening a new terminal to run the server or client, run ./setup from the root directory to set the correct python environment.*
 
@@ -35,5 +39,6 @@ Running the Client
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
 
     **run client --help to know all the command line options**
+
 
 
