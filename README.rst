@@ -1,11 +1,17 @@
 A basic server client tool for image manipulation using GRPC.
 This was written for an interview with Neuralink Corp.
 
-To run the installation, run  ```./setup ``` in the project's root directory.
+Installation
+-------------------------------------------------------------------------------------------------
+To run the installation, 
+1. run  ```./setup ``` in the project's root directory.
 
-Whenever opening a new terminal to run the server or client, run ./setup from the root directory to set the correct python environment.
 
-To run the sever, 
+*Whenever opening a new terminal to run the server or client, run ./setup from the root directory to set the correct python environment.*
+
+Running the Server
+--------------------------------------------------------------------------------------------------
+
 1. open a new terminal
 
 2. cd into the root directory of this package
@@ -17,11 +23,17 @@ To run the sever,
 
     **run server --help to know all the options**
 
-To run the sever, 
+Running the Client
+--------------------------------------------------------------------------------------------------
+To run the client, 
 1. open a new terminal
+
 2. cd into the root directory of this package
+
 3. run: ./setup
+
 4. type: client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH
+
     
   **run client --help to know all the command line options**
 
