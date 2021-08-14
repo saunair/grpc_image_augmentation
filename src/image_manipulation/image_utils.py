@@ -63,7 +63,6 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
 
     # If an RGB image run the filter thrice.
     if len(input_image.shape) > 2:
-        start_time = time.time()
         result = np.empty(input_image.shape, dtype=input_image.dtype)
         def set_result(input_image, depth, result):
             result[:, :, depth] = filter_2d(input_image[:, :, depth])
@@ -77,7 +76,6 @@ def get_mean_image(input_image: np.ndarray) -> np.ndarray:
 
         for t in threads:
             t.join()
-        print(time.time() - start_time)
         return result
 
     a = filter_2d(input_image)

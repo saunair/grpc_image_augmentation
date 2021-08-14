@@ -182,8 +182,8 @@ def _run_servers_one_process(
 def spawn_server(
     port: int = 50051, 
     host: str = "localhost", 
-    max_workers_per_process: int = 10, 
-    number_of_cores_to_use: int = 3
+    max_workers_per_process: int = 8, 
+    number_of_cores_to_use: int = 4
 ) -> None:
     """Run one server request.
     

@@ -1,6 +1,7 @@
 import os
 import logging
 import time
+import multiprocessing
 
 import cv2
 from fire import Fire
@@ -127,34 +128,46 @@ def run_client(
         # Hooray, we now write the image to the user's preferred location.
         cv2.imwrite(img=output_image, filename=output)
     else:
-        response_times = []
+        # Run the scaling testing mode with multiple client requests to send to the server.
         rotate = rotate.lower()
+
+        def _image_manipulation_thread(image_extension_option, filename):
+            if filename.endswith(image_extension_option):
+                image_file_path = os.path.join(input, filename)
+                try:
+                    input_image = cv2.imread(image_file_path)
+                except:
+                    LOG.error(f"something went wrong while reading the input image: {image_file_path}")
+                    return
+                if input_image is None:
+                    LOG.error(f"something went wrong while reading the input image: {image_file_path}")
+                    return
+
+                output_image = run_one_request_on_channel(
+                    mean=mean, 
+                    rotate=ALLOWED_ROTATIONS.index(rotate) * 90, 
+                    channel=channel,
+                    input_image=input_image,
+                )
+    
+                # Hooray, we now write the image to the user's preferred location.
+                output_image_file_path = os.path.join(output, f"manipulated_{filename}")
+                cv2.imwrite(img=output_image, filename=output_image_file_path)
+
+        workers = []
+        start_time = time.time()
         for filename in os.listdir(input):
             for image_extension_option in SUPPORTED_IMAGE_EXTENSIONS:
-                if filename.endswith(image_extension_option):
-                    image_file_path = os.path.join(input, filename)
-                    try:
-                        input_image = cv2.imread(image_file_path)
-                    except:
-                        LOG.error(f"something went wrong while reading the input image: {image_file_path}")
-                        continue
-                    if input_image is None:
-                        LOG.error(f"something went wrong while reading the input image: {image_file_path}")
-                        continue
+                worker = multiprocessing.Process(
+                    target=_image_manipulation_thread, args=(image_extension_option, filename)
+                )
+                worker.start()
+                workers.append(worker)
 
-                    start_time = time.time()
-                    output_image = run_one_request_on_channel(
-                        mean=mean, 
-                        rotate=ALLOWED_ROTATIONS.index(rotate) * 90, 
-                        channel=channel,
-                        input_image=input_image,
-                    )
-                    response_times.append(time.time() - start_time)
-    
-                    # Hooray, we now write the image to the user's preferred location.
-                    output_image_file_path = os.path.join(output, f"manipulated_{filename}")
-                    cv2.imwrite(img=output_image, filename=output_image_file_path)
-        print(f"Response time: {response_times}")
+        for worker in workers:
+            worker.join()
+
+        print(f"Response time: {time.time() - start_time}")
 
 
 def main():
