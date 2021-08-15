@@ -29,7 +29,7 @@ Running the Server
 
 4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
 
-    **run `server --help` to know all the options**
+   **run `server --help` to know all the options**
 
 Running the Client
 --------------------------------------------------------------------------------------------------
