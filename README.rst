@@ -13,7 +13,7 @@ To run the installation,
    *If all tests pass, the installation worked.*
 
 
-*Whenever opening a new terminal to run the server or client, run ./setup from the root directory to set the correct python environment.*
+*Whenever opening a new terminal to run the server or client, run `./start_terminal` from the root directory to set the correct python environment.*
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 Running the Server
