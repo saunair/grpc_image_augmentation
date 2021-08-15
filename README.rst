@@ -41,6 +41,8 @@ Running the Client
    *This should make a new poetry shell*
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
+    
+   **run client --help to know all the command line options**
 
 Example After Installation
 --------------------------
@@ -54,7 +56,6 @@ Example After Installation
 
       command2: ```client --mean --input ./tests/testing_data/image.png --output data/my_output.png``
 
-    **run client --help to know all the command line options**
 
 
 
