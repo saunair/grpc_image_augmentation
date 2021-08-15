@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source bin/activate
+source $HOME/.poetry/env
+poetry shell
