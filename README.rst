@@ -4,7 +4,7 @@ This was written for an interview with Neuralink Corp.
 Installation
 -------------------------------------------------------------------------------------------------
 To run the installation, 
-1. run  ``./setup`` in the project's root directory.
+1. run  ``sudo ./setup`` in the project's root directory.
 
    *To verify if the installation worked fine, you may run the unit tests.*
 
@@ -23,7 +23,7 @@ Running the Server
 
 2. cd into the root directory of this package
 
-3. run: ``./setup``
+3. run: ``sudo ./setup``
    *This should make a new poetry shell*
 
 4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
@@ -36,7 +36,7 @@ Running the Client
 
 2. cd into the root directory of this package
 
-3. run: ``./setup``
+3. run: ``sudo ./setup``
    *This should make a new poetry shell*
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
