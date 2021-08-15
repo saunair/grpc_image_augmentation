@@ -36,7 +36,7 @@ Running the Client
 
 2. cd into the root directory of this package
 
-3. run: ``./start_terminal`
+3. run: ``./start_terminal``
    *This should make a new poetry shell*
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
