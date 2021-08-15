@@ -73,7 +73,7 @@ def check_and_print_if_valid_inputs(
 
 def run_client(
     mean:bool = False, 
-    rotate: str = "ninety_deg", 
+    rotate: str = "NINETY_DEG", 
     port: str = "50051", 
     host: str = "localhost",
     # Using a python keyword "input" here. But keeping the requirements of the assignment.
@@ -99,7 +99,7 @@ def run_client(
             ('grpc.max_receive_message_length', 1024 * 1024 * 50),
         ]
     )
-    if not timeit: # The original mode of the client.
+    if not timeit: # The original mode of the client as per the assignment.
         if not check_and_print_if_valid_inputs(
             mean=mean,
             rotate=rotate,
@@ -124,9 +124,9 @@ def run_client(
             rotate=rotate * 90, 
             channel=channel,
             input_image=input_image,
-        )
-        # Hooray, we now write the image to the user's preferred location.
-        cv2.imwrite(img=output_image, filename=output)
+        ) 
+        # Hooray, we now write the image to the user's preferred location.  
+        cv2.imwrite(img=output_image, filename=output) 
     else:
         # Run the scaling testing mode with multiple client requests to send to the server.
         rotate = rotate.lower()

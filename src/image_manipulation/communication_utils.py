@@ -47,9 +47,11 @@ class ImageService(NLImageServiceServicer):
         try:
             user_image_pb = convert_proto_to_image(request)
             mean_image_matrix = get_mean_image(user_image_pb)
+            LOG.debug(f"Completed an image mean")
             return convert_image_to_proto(mean_image_matrix)
         except:
             e = sys.exc_info()[0]
+            LOG.debug(f"Faced an exception during convolution.")
             # Handling all types of exception as we don't have an exact control over the input.
             return NullImageProto(
                 msg=bytes(
@@ -73,9 +75,11 @@ class ImageService(NLImageServiceServicer):
                 input_image=user_image_pb, 
                 rotation_request=request.rotation * 90
             )
+            LOG.debug(f"Completed an image rotation")
             return convert_image_to_proto(rotated_image_matrix)
         except Exception as e:
             # Handling all types of exception as we don't have an exact control over the input.
+            LOG.debug(f"Faced an exception while rotation.")
             return NullImageProto(msg=format(e))
 
 
