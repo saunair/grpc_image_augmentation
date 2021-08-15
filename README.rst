@@ -8,7 +8,7 @@ To run the installation,
 
    *To verify if the installation worked fine, you may run the unit tests.*
 
-2. run ``$ pytest tests/`` from the root directory.
+2. run ``pytest tests/`` from the root directory.
 
    *If all tests pass, the installation worked.*
 
@@ -23,7 +23,7 @@ Running the Server
 
 2. cd into the root directory of this package
 
-3. run: ``sudo ./setup``
+3. run: ``./start_terminal``
    *This should make a new poetry shell*
 
 4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
@@ -36,7 +36,7 @@ Running the Client
 
 2. cd into the root directory of this package
 
-3. run: ``sudo ./setup``
+3. run: ``./start_terminal`
    *This should make a new poetry shell*
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
