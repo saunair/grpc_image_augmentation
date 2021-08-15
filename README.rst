@@ -41,6 +41,16 @@ Running the Client
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
 
+Example After Installation
+--------------------------
+   Terminal 1:  
+      ```./start_terminal```
+      ```server```
+
+   Terminal 2:  
+      ```./start_terminal```
+      ```client --mean --input ./tests/testing_data/image.png --output data/my_output.png``
+
     **run client --help to know all the command line options**
 
 
