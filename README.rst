@@ -5,6 +5,7 @@ Installation
 -------------------------------------------------------------------------------------------------
 To run the installation, 
 1. run  ``sudo ./setup`` in the project's root directory.
+   *sudo is optional, but recommended. Some permission issues could occur causing installs to fail*
 
    *To verify if the installation worked fine, you may run the unit tests.*
 
