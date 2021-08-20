@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# This script needs to be run as sudo, the following logic checks against it.
+if ! [ $(id -u) = 0 ]; then
+   echo "The script need to be run as root." >&2
+   exit 1
+fi
+
+if [ $SUDO_USER ]; then
+    real_user=$SUDO_USER
+else
+    real_user=$(whoami)
+fi
+
 python3 -m pip install --user virtualenv
 virtualenv --python=/usr/bin/python3.7 .
 source bin/activate
@@ -7,14 +19,5 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 
 source $HOME/.poetry/env
 
-poetry add requests numpy
-poetry add requests opencv-python
-poetry add requests imutils
-poetry add requests grpcio
-poetry add requests grpcio-tools
-poetry add requests fire
-poetry add requests mock
-poetry add requests numba
-poetry add requests ipython
 # python3 -m grpc_tools.protoc data/proto/image.proto --python_out=src/image_manipulation/grpc_pb/ --proto_path=data/proto/ --grpc_python_out=src/image_manipulation/grpc_pb
 poetry build && poetry lock && poetry install && poetry shell
