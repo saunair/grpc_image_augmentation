@@ -28,6 +28,7 @@ Running the Server
    *This should make a new poetry shell*
 
 4. Enter the command: ``server --host-name MY_HOST --port MY_PORT``
+   Root level script is provided too. You may run ./server the same way
 
    **run `server --help` to know all the options**
 
@@ -41,6 +42,7 @@ Running the Client
    *This should make a new poetry shell*
 
 4. Enter the command: ``client --host-name MY_HOST --port MY_PORT --input MY_IMAGE_PATH --output --MY_IMAGE_OUTPUT_PATH``
+   Root level script is provided too. You may run ./client the same way
     
    **run `client --help` to know all the command line options**
 
