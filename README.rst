@@ -57,7 +57,3 @@ Example After Installation
       command1: ```./start_terminal```
 
       command2: ```client --mean --input ./tests/testing_data/image.png --output data/my_output.png``
-
-
-
-
