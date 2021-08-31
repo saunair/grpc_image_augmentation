@@ -42,7 +42,7 @@ def test_end_to_end_server_client(port: int = 5000, host: str = "localhost"):
     output_image_path = os.path.join(dir_path, f"testing_data/op_{time_at_start}.png")
     # Start the server.
     with grpc_server_process() as server:
-        client_sub_process = subprocess.Popen(
+        client_sub_process = subprocess.run(
             [
                 "client", 
                 "--host", 
@@ -60,6 +60,4 @@ def test_end_to_end_server_client(port: int = 5000, host: str = "localhost"):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        # Run the client call.
-        client_sub_process.communicate(timeout=10.0)
     assert os.path.exists(output_image_path), "output image doesn't exist."
